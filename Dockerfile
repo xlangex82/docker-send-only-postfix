@@ -35,6 +35,7 @@ RUN echo "" > /etc/postfix/main.cf
 RUN echo "" > /etc/postfix/header_checks
 RUN echo "" > /etc/opendkim.conf
 RUN echo "" > /etc/default/opendkim
+RUN mkdir /etc/opendkim
 RUN echo "" > /etc/opendkim/TrustedHosts
 RUN echo "" > /etc/opendkim/SigningTable
 RUN echo "" > /etc/opendkim/KeyTable
