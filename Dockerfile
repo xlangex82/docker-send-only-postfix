@@ -18,16 +18,19 @@ RUN apt-get update && \
 EXPOSE 25
 
 # add configuration files
-ADD ./config/supervisord/supervisord.conf   /etc/supervisor/supervisord.conf
-ADD ./config/rsyslog/rsyslog.conf           /etc/rsyslog.conf
-ADD ./config/postfix/main.cf                /etc/postfix/main.cf
-ADD ./config/postfix/header_checks          /etc/postfix/header_checks
-ADD ./config/opendkim/opendkim.conf         /etc/opendkim.conf
-ADD ./config/opendkim/opendkim              /etc/default/opendkim
-ADD ./config/opendkim/TrustedHosts          /etc/opendkim/TrustedHosts
-ADD ./config/opendkim/SigningTable          /etc/opendkim/SigningTable
-ADD ./config/opendkim/KeyTable              /etc/opendkim/KeyTable
+ADD ./config/supervisord/supervisord.conf   /template/etc/supervisor/supervisord.conf.tpl
+ADD ./config/rsyslog/rsyslog.conf           /template/etc/rsyslog.conf.tpl
+ADD ./config/postfix/main.cf                /template/etc/postfix/main.cf.tpl
+ADD ./config/postfix/header_checks          /template/etc/postfix/header_checks.tpl
+ADD ./config/opendkim/opendkim.conf         /template/etc/opendkim.conf.tpl
+ADD ./config/opendkim/opendkim              /template/etc/default/opendkim.tpl
+ADD ./config/opendkim/TrustedHosts          /template/etc/opendkim/TrustedHosts.tpl
+ADD ./config/opendkim/SigningTable          /template/etc/opendkim/SigningTable.tpl
+ADD ./config/opendkim/KeyTable              /template/etc/opendkim/KeyTable.tpl
 
+# add initial setup script
+ADD ./initial_setup.sh /usr/bin/initial_setup
+RUN chmod +x /usr/bin/initial_setup
 # configure the entrypoint
 ADD ./docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
