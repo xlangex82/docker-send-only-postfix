@@ -20,6 +20,12 @@ services:
       - "./data/config/opendkim/TrustedHosts:/etc/opendkim/TrustedHosts"
       - "./data/config/opendkim/SigningTable:/etc/opendkim/SigningTable"
       - "./data/config/opendkim/KeyTable:/etc/opendkim/KeyTable"
+    environment:
+      - DOMAIN=${DOMAIN}
+      - HOSTNAME_FQDN=${HOSTNAME_FQDN}
+      - MYNETWORKS=${MYNETWORKS}
+      - MYDESTINATION=${MYDESTINATION}
+      - DKIM_SELEKTOR=${DKIM_SELEKTOR}
 
 # If you want to use limited ressources - example
 #    deploy:
