@@ -13,6 +13,7 @@ echo "
 Send-Only-Postfix Relay Server
 "
 echo "[INFO] Setting up container"
+env
 
 # read domain from environment
 if [ -z "${DOMAIN}" ]; then
