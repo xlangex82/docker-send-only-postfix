@@ -8,6 +8,13 @@ FROM ubuntu:24.04
 LABEL maintainer="XlangeX82" \
       Description="XlangeX82 - Postfix send only container"
 
+# Dynamically ENV variables
+ENV DOMAIN
+ENV HOSTNAME_FQDN
+ENV MYNETWORKS
+ENV MYDESTINATION
+ENV DKIM_SELEKTOR
+
 # install packages
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
