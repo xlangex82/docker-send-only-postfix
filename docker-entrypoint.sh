@@ -12,6 +12,12 @@ echo "
                                                                            
 Send-Only-Postfix Relay Server
 "
+echo "[INFO] Setting up container"
+export DOMAIN
+export HOSTNAME_FQDN
+export MYNETWORKS
+export MYDESTINATION
+export DKIM_SELEKTOR
 
 DOMAIN=${DOMAIN:-}
 HOSTNAME_FQDN=${HOSTNAME_FQDN:-}
@@ -72,6 +78,10 @@ fi
 chown opendkim:opendkim /etc/opendkim/domainkeys
 chown opendkim:opendkim /etc/opendkim/domainkeys/${DKIM_SELEKTOR}.private
 chmod 400 /etc/opendkim/domainkeys/${DKIM_SELEKTOR}.private
+
+
+echo "[INFO] Finished container setup"
+
 
 # launch the processes supervisor
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
