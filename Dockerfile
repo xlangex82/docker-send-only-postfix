@@ -1,9 +1,9 @@
-FROM ubuntu:18.04
+FROM ubuntu:24.04
 
 # install packages
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends supervisor postfix opendkim rsyslog && \
+    apt-get install -y --no-install-recommends supervisor postfix opendkim opendkim-tools rsyslog && \
     rm -rf /var/lib/apt/lists/* 
 
 # mail server will be listening on this port

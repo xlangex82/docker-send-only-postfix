@@ -1,46 +1,72 @@
-# domain for the emails
+# ================== Outgoing encryption settings ==========================
+# Set the FQDN Hostname of the mailsystem (change in .env file)
+myhostname = ${HOSTNAME_FQDN}
+# domain for the emails (change in .env file)
 mydomain = ${DOMAIN}
 myorigin = ${DOMAIN}
 
+
+# ================== Postfix-wide settings ==========================
 # we do NOT want to receive emails from any domain... specify an empty list here
-mydestination =
+mydestination = ${MYDESTINATION}
+# we only want to allow from defined networks
+mynetworks = ${MYNETWORKS}
+
 
 # tells Postfix from which networks it should accept emails to send
 # subnet == Postfix should forward mail from SMTP clients in the same IP subnetworks as the local machine
 mynetworks_style = subnet
-
 # direct delivery to Internet
 relayhost =
-
 # accept emails from all network interfaces (we will restrict this using Docker networks)
 inet_interfaces = all
+# cleanup incoming emails
+always_add_missing_headers = yes
+# hide details about this instance of Postfix
+smtpd_banner = $myhostname
+# hide details of the real email sender
+header_checks = regexp:/etc/postfix/header_checks
+# disable useless services
+biff = no
+readme_directory = no
 
+# ================== Outgoing encryption settings ==========================
 # encrypt emails from this to the destination mail server
 smtp_tls_security_level = encrypt
+smtp_tls_ciphers = high
 smtp_tls_mandatory_ciphers = high
+# disable some weak tls protokolls
+smtp_tls_protocols = !SSLv2, !SSLv3,!TLSv1,!TLSv1.1
+smtp_tls_mandatory_protocols = !SSLv2, !SSLv3,!TLSv1,!TLSv1.1
+# define high cipher list
+tls_high_cipherlist = ECDHE-ECDSA-AES256-GCM-SHA384:TLS_AES_256_GCM_SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:TLS_CHACHA20_POLY1305_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:TLS_AES_128_GCM_SHA256:ECDHE-RSA-AES256-GCM-SHA384:TLS_AES_256_GCM_SHA384:ECDHE-RSA-CHACHA20-POLY1305:TLS_CHACHA20_POLY1305_SHA256:ECDHE-RSA-AES128-GCM-SHA256:TLS_AES_128_GCM_SHA256
+tls_preempt_cipherlist = yes
 
+# ================== Incomming encryption settings ==========================
 # do not require encryption from the client to this server
 smtpd_tls_security_level = none
 smtpd_relay_restrictions =  permit_mynetworks, defer_unauth_destination
 
+
+# ================== DKIM settings ==========================
 # opendkim
 milter_protocol = 2
 milter_default_action = tempfail
 smtpd_milters = inet:localhost:12301
 non_smtpd_milters = inet:localhost:12301
 
+# ================== LIMITS ==========================
 # no limits on the email number
 mailbox_size_limit = 0
 
-# cleanup incoming emails
-always_add_missing_headers = yes
+# Client connection limits
+smtpd_client_connection_count_limit = 50
+smtpd_client_connection_rate_limit = 0
+smtpd_client_message_rate_limit = 0
 
-# hide details about this instance of Postfix
-smtpd_banner = $myhostname
+default_destination_concurrency_limit = 40
+lmtp_destination_concurrency_limit = 20
+relay_destination_concurrency_limit = 20
+smtp_destination_concurrency_limit = 20
+virtual_destination_concurrency_limit = 20
 
-# hide details of the real email sender
-header_checks = regexp:/etc/postfix/header_checks
-
-# disable useless services
-biff = no
-readme_directory = no
