@@ -67,3 +67,5 @@ echo "[INFO] Finished container setup"
 
 
 echo "[SUCCESS] Initial setup is done - check local volume - start with docker compose up -d"
+
+exec "$@"
