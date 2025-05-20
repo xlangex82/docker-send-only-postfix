@@ -1,4 +1,12 @@
+## #################################################################
+## XlangeX82
+## Description: Dockerfile for Postfix container as send only (relay) server
+## Author:      Peter Lange
+## Version:     2025-05-20
+
 FROM ubuntu:24.04
+LABEL maintainer="XlangeX82" \
+      Description="XlangeX82 - Postfix send only container"
 
 # install packages
 ENV DEBIAN_FRONTEND noninteractive
