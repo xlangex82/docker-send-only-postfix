@@ -32,6 +32,7 @@ ADD ./config/opendkim/KeyTable              /template/etc/opendkim/KeyTable.tpl
 RUN touch /etc/supervisor/supervisord.conf
 RUN echo "" > /etc/supervisor/supervisord.conf
 RUN touch /etc/rsyslog.conf
+RUN touch /etc/opendkim.conf
 RUN echo "" > /etc/rsyslog.conf
 RUN echo "" > /etc/postfix/main.cf
 RUN echo "" > /etc/postfix/header_checks
