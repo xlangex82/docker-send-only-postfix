@@ -36,16 +36,16 @@ sed -i ${PATTERN} /template/etc/opendkim/KeyTable.tpl
 
 
 echo "[INFO] creating Configfiles from templates"
-cat /etc/opendkim/SigningTable.tpl > /etc/opendkim/SigningTable
-cat /etc/postfix/main.cf.tpl > /etc/postfix/main.cf
-cat /etc/opendkim/KeyTable.tpl > /etc/opendkim/KeyTable
+cat /template/etc/opendkim/SigningTable.tpl > /etc/opendkim/SigningTable
+cat /template/etc/postfix/main.cf.tpl > /etc/postfix/main.cf
+cat /template/etc/opendkim/KeyTable.tpl > /etc/opendkim/KeyTable
 
-cat /etc/supervisor/supervisord.conf.tpl /etc/supervisor/supervisord.conf
-cat /etc/rsyslog.conf.tpl > /etc/rsyslog.conf
-cat /etc/postfix/header_checks.tpl > /etc/postfix/header_checks
-cat /etc/opendkim.conf.tpl > /etc/opendkim.conf
-cat /etc/default/opendkim.tpl > /etc/default/opendkim
-cat /etc/opendkim/TrustedHosts.tpl > /etc/opendkim/TrustedHosts
+cat /template/etc/supervisor/supervisord.conf.tpl /etc/supervisor/supervisord.conf
+cat /template/etc/rsyslog.conf.tpl > /etc/rsyslog.conf
+cat /template/etc/postfix/header_checks.tpl > /etc/postfix/header_checks
+cat /template/etc/opendkim.conf.tpl > /etc/opendkim.conf
+cat /template/etc/default/opendkim.tpl > /etc/default/opendkim
+cat /template/etc/opendkim/TrustedHosts.tpl > /etc/opendkim/TrustedHosts
 
 
 echo "[INFO] Check for DKIM keys"
@@ -53,6 +53,7 @@ echo "[INFO] Check for DKIM keys"
 if [ ! -f /etc/opendkim/domainkeys/${DKIM_SELEKTOR}.private ]; then
     echo "[INFO] DKIM Keys doesn't exist in '/etc/opendkim/domainkeys/' for Selektor ${DKIM_SELEKTOR}."
     echo "[INFO] Trying to generate a DKIM Key for selektor ${DKIM_SELEKTOR}"
+    mkdir -p /etc/opendkim/domainkeys
     opendkim-genkey -s ${DKIM_SELEKTOR} -d ${DOMAIN} --directory=/etc/opendkim/domainkeys/ && echo "[INFO] DKIM key generated"
 fi
 
