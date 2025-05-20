@@ -40,7 +40,7 @@ cat /template/etc/opendkim/SigningTable.tpl > /etc/opendkim/SigningTable
 cat /template/etc/postfix/main.cf.tpl > /etc/postfix/main.cf
 cat /template/etc/opendkim/KeyTable.tpl > /etc/opendkim/KeyTable
 
-cat /template/etc/supervisor/supervisord.conf.tpl /etc/supervisor/supervisord.conf
+cat /template/etc/supervisor/supervisord.conf.tpl > /etc/supervisor/supervisord.conf
 cat /template/etc/rsyslog.conf.tpl > /etc/rsyslog.conf
 cat /template/etc/postfix/header_checks.tpl > /etc/postfix/header_checks
 cat /template/etc/opendkim.conf.tpl > /etc/opendkim.conf
