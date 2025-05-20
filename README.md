@@ -28,6 +28,15 @@ To check the newly created image is now available on your hostsystem fire the fo
 sudo docker images
 ```
 
+## copy files
+Copy needed exampkle files to your docker project folder from cloned git-repo folder
+
+```bash
+# cd into your project folder
+sudo cp docker-send-only-postfix/.env .
+sudo cp docker-send-only-postfix/docker-compose/docker-compose.yml .
+sudo cp docker-send-only-postfix/config data/. -r
+```
 
 ## Setup
 In order to use this container, you will need to setup OpenDKIM.

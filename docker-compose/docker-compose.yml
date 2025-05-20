@@ -7,8 +7,6 @@ services:
     image: xlangex82/send-only-postfix:2025-05-20.Alpha1
     container_name: postfix-relay-server
     network_mode: "host"    # change this settings if needed! https://docs.docker.com/compose/compose-file/#network-configuration-reference
-    networks:
-      mynetwork: {}
     ports:
       - "25:25"       # SMTP                - Required
     restart: ${RESTART_MODE}  # SET value in .env
