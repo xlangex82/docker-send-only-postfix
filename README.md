@@ -3,6 +3,22 @@ Docker container with Postfix configured in send-only mode and OpenDKIM.
 Postfix will accept emails from all private IP addresses on all network interfaces.
 All emails send from Postfix to other email servers are encrypted using standard TLS.
 
+## Build your own local image from Dockerfile
+
+Run the following to create your local image (change the tagging/naming as you wish)
+```bash
+docker build -t xlangex82/send-only-postfix:2025-05-20.Alpha1 -f Dockerfile . 
+```
+If the process ends without any errors, the image is normally created successfully.
+
+If not successfull, please check the errormessage!
+
+To check the newly created image is now available on your hostsystem fire the following command and look for your given imagename
+```bash
+docker images
+```
+
+
 ## Setup
 In order to use this container, you will need to setup OpenDKIM.
 
