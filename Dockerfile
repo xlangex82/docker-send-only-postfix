@@ -28,9 +28,20 @@ ADD ./config/opendkim/TrustedHosts          /template/etc/opendkim/TrustedHosts.
 ADD ./config/opendkim/SigningTable          /template/etc/opendkim/SigningTable.tpl
 ADD ./config/opendkim/KeyTable              /template/etc/opendkim/KeyTable.tpl
 
+# create empty config files
+RUN echo "" > /etc/supervisor/supervisord.conf
+RUN echo "" > /etc/rsyslog.conf
+RUN echo "" > /etc/postfix/main.cf
+RUN echo "" > /etc/postfix/header_checks
+RUN echo "" > /etc/opendkim.conf
+RUN echo "" > /etc/default/opendkim
+RUN echo "" > /etc/opendkim/TrustedHosts
+RUN echo "" > /etc/opendkim/SigningTable
+RUN echo "" > /etc/opendkim/KeyTable
+
 # add initial setup script
-ADD ./initial_setup.sh /usr/bin/initial_setup
-RUN chmod +x /usr/bin/initial_setup
+ADD ./initial_setup.sh /initial_setup.sh
+RUN chmod +x /initial_setup.sh
 # configure the entrypoint
 ADD ./docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
