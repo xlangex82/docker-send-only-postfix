@@ -40,20 +40,20 @@ fi
 
 # replace the placeholders in the configuration files
 PATTERN="s/\${DOMAIN}/$DOMAIN/g"
-sed -i ${PATTERN} /etc/postfix/main.cf
-sed -i ${PATTERN} /etc/opendkim/SigningTable
-sed -i ${PATTERN} /etc/opendkim/KeyTable
+sed ${PATTERN} /etc/postfix/main.cf
+sed ${PATTERN} /etc/opendkim/SigningTable
+sed ${PATTERN} /etc/opendkim/KeyTable
 
 PATTERN="s/\${HOSTNAME_FQDN}/$HOSTNAME_FQDN/g"
-sed -i ${PATTERN} /etc/postfix/main.cf
+sed ${PATTERN} /etc/postfix/main.cf
 PATTERN="s/\${MYNETWORKS}/$MYNETWORKS/g"
-sed -i ${PATTERN} /etc/postfix/main.cf
+sed ${PATTERN} /etc/postfix/main.cf
 PATTERN="s/\${MYDESTINATION}/$MYDESTINATION/g"
-sed -i ${PATTERN} /etc/postfix/main.cf
+sed ${PATTERN} /etc/postfix/main.cf
 
 PATTERN="s/\${DKIM_SELEKTOR}/$DKIM_SELEKTOR/g"
-sed -i ${PATTERN} /etc/opendkim/SigningTable
-sed -i ${PATTERN} /etc/opendkim/KeyTable
+sed ${PATTERN} /etc/opendkim/SigningTable
+sed ${PATTERN} /etc/opendkim/KeyTable
 
 # check the presence of the key for opendkim
 if [ ! -f /etc/opendkim/domainkeys/${DKIM_SELEKTOR}.private ]; then
