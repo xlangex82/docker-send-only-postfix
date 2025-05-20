@@ -13,6 +13,14 @@ echo "
 Send-Only-Postfix Relay Server
 "
 
+DOMAIN=${DOMAIN:-}
+HOSTNAME_FQDN=${HOSTNAME_FQDN:-}
+MYNETWORKS=${MYNETWORKS:-}
+MYDESTINATION=${MYDESTINATION:-}
+DKIM_SELEKTOR=${DKIM_SELEKTOR:-}
+
+
+
 # read domain from environment
 if [ -z "${DOMAIN}" ]; then
     echo "DOMAIN environment variable not found. Please set it before running this Docker container."
