@@ -39,8 +39,6 @@ fi
 
 # replace the placeholders in the configuration files
 PATTERN="s/\${DOMAIN}/$DOMAIN/g"
-"sed -i "s/$word_to_replace/$replacement/g" example.txt"
-
 sed -i ${PATTERN} /etc/postfix/main.cf
 sed -i ${PATTERN} /etc/opendkim/SigningTable
 sed -i ${PATTERN} /etc/opendkim/KeyTable
