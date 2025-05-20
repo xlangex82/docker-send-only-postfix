@@ -11,7 +11,6 @@ services:
       - "25:25"       # SMTP                - Required
     restart: ${RESTART_MODE}  # SET value in .env
     volumes:
-      - "./data/config/:/"
       - "./data/config/rsyslog/rsyslog.conf:/etc/rsyslog.conf"
       - "./data/config/postfix/main.cf:/etc/postfix/main.cf"
       - "./data/config/postfix/header_checks:/etc/postfix/header_checks"
