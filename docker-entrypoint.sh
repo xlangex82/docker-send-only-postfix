@@ -14,14 +14,6 @@ Send-Only-Postfix Relay Server
 "
 echo "[INFO] Setting up container"
 
-#DOMAIN=${DOMAIN:-}
-#HOSTNAME_FQDN=${HOSTNAME_FQDN:-}
-#MYNETWORKS=${MYNETWORKS:-}
-#MYDESTINATION=${MYDESTINATION:-}
-#DKIM_SELEKTOR=${DKIM_SELEKTOR:-}
-
-
-
 # read domain from environment
 if [ -z "${DOMAIN}" ]; then
     echo "DOMAIN environment variable not found. Please set it before running this Docker container."
@@ -46,19 +38,21 @@ fi
 # TODO: escape domain!
 
 # replace the placeholders in the configuration files
-PATTERN="s/\${DOMAIN}/${DOMAIN}/g"
+PATTERN="s/\${DOMAIN}/$DOMAIN/g"
+"sed -i "s/$word_to_replace/$replacement/g" example.txt"
+
 sed -i ${PATTERN} /etc/postfix/main.cf
 sed -i ${PATTERN} /etc/opendkim/SigningTable
 sed -i ${PATTERN} /etc/opendkim/KeyTable
 
-PATTERN="s/\${HOSTNAME_FQDN}/${HOSTNAME_FQDN}/g"
+PATTERN="s/\${HOSTNAME_FQDN}/$HOSTNAME_FQDN/g"
 sed -i ${PATTERN} /etc/postfix/main.cf
-PATTERN="s/\${MYNETWORKS}/${MYNETWORKS}/g"
+PATTERN="s/\${MYNETWORKS}/$MYNETWORKS/g"
 sed -i ${PATTERN} /etc/postfix/main.cf
-PATTERN="s/\${MYDESTINATION}/${MYDESTINATION}/g"
+PATTERN="s/\${MYDESTINATION}/$MYDESTINATION/g"
 sed -i ${PATTERN} /etc/postfix/main.cf
 
-PATTERN="s/\${DKIM_SELEKTOR}/${DKIM_SELEKTOR}/g"
+PATTERN="s/\${DKIM_SELEKTOR}/$DKIM_SELEKTOR/g"
 sed -i ${PATTERN} /etc/opendkim/SigningTable
 sed -i ${PATTERN} /etc/opendkim/KeyTable
 
