@@ -1,0 +1,46 @@
+# sample docker-compose file for XlangeX82 Send-Only-Postfix Image/Container
+# example container name: postfix-relay-server
+
+---
+services:
+  postfix-relay-server:
+    image: xlangex82/send-only-postfix:2025-05-20.Alpha1
+    container_name: postfix-relay-server
+    network_mode: "host"    # change this settings if needed! https://docs.docker.com/compose/compose-file/#network-configuration-reference
+    networks:
+      mynetwork: {}
+    ports:
+      - "25:25"       # SMTP                - Required
+    restart: ${RESTART_MODE}  # SET value in .env
+    volumes:
+      - "./data/config/:/"
+      - "./data/config/rsyslog/rsyslog.conf:/etc/rsyslog.conf"
+      - "./data/config/postfix/main.cf:/etc/postfix/main.cf"
+      - "./data/config/postfix/header_checks:/etc/postfix/header_checks"
+      - "./data/config/opendkim/opendkim.conf:/etc/opendkim.conf"
+      - "./data/config/opendkim/opendkim:/etc/default/opendkim"
+      - "./data/config/supervisord/supervisord.conf:/etc/supervisor/supervisord.conf"
+      - "./data/config/opendkim/TrustedHosts:/etc/opendkim/TrustedHosts"
+      - "./data/config/opendkim/SigningTable:/etc/opendkim/SigningTable"
+      - "./data/config/opendkim/KeyTable:/etc/opendkim/KeyTable"
+
+# If you want to use limited ressources - example
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.50'
+#          memory: 50M
+#          pids: 1
+#        reservations:
+#          cpus: '0.25'
+#          memory: 20M
+
+# If you need a dedicated network setup - example
+#    networks:
+#      postfix_network:
+#        ipv4_address: 10.20.30.40
+#
+#
+#networks:
+#  postfix_network:
+#    external: true
