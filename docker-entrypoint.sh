@@ -40,5 +40,7 @@ fi
 
 echo "[INFO] Finished environment check - starting services now"
 
+exec /initial_setup.sh
+
 # launch the processes supervisor
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
