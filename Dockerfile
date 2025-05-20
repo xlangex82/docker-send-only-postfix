@@ -18,30 +18,16 @@ RUN apt-get update && \
 EXPOSE 25
 
 # add configuration files
-ADD ./config/supervisord/supervisord.conf   /template/etc/supervisor/supervisord.conf.tpl
-ADD ./config/rsyslog/rsyslog.conf           /template/etc/rsyslog.conf.tpl
-ADD ./config/postfix/main.cf                /template/etc/postfix/main.cf.tpl
-ADD ./config/postfix/header_checks          /template/etc/postfix/header_checks.tpl
-ADD ./config/opendkim/opendkim.conf         /template/etc/opendkim.conf.tpl
-ADD ./config/opendkim/opendkim              /template/etc/default/opendkim.tpl
-ADD ./config/opendkim/TrustedHosts          /template/etc/opendkim/TrustedHosts.tpl
-ADD ./config/opendkim/SigningTable          /template/etc/opendkim/SigningTable.tpl
-ADD ./config/opendkim/KeyTable              /template/etc/opendkim/KeyTable.tpl
+ADD ./config/supervisord/supervisord.conf   /etc/supervisor/supervisord.conf
+ADD ./config/rsyslog/rsyslog.conf           /etc/rsyslog.conf
+ADD ./config/postfix/main.cf                /etc/postfix/main.cf
+ADD ./config/postfix/header_checks          /etc/postfix/header_checks
+ADD ./config/opendkim/opendkim.conf         /etc/opendkim.conf
+ADD ./config/opendkim/opendkim              /etc/default/opendkim
+ADD ./config/opendkim/TrustedHosts          /etc/opendkim/TrustedHosts
+ADD ./config/opendkim/SigningTable          /etc/opendkim/SigningTable
+ADD ./config/opendkim/KeyTable              /etc/opendkim/KeyTable
 
-# create empty config files
-RUN touch /etc/supervisor/supervisord.conf
-RUN echo "" > /etc/supervisor/supervisord.conf
-RUN touch /etc/rsyslog.conf
-RUN touch /etc/opendkim.conf
-RUN echo "" > /etc/rsyslog.conf
-RUN echo "" > /etc/postfix/main.cf
-RUN echo "" > /etc/postfix/header_checks
-RUN echo "" > /etc/opendkim.conf
-RUN echo "" > /etc/default/opendkim
-RUN mkdir /etc/opendkim
-RUN touch /etc/opendkim/TrustedHosts
-RUN touch /etc/opendkim/SigningTable
-RUN touch /etc/opendkim/KeyTable
 
 # add initial setup script
 ADD ./initial_setup.sh /initial_setup.sh
