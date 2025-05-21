@@ -20,10 +20,11 @@ services:
       - "./data/config/opendkim/TrustedHosts:/etc/opendkim/TrustedHosts"
       - "./data/config/opendkim/SigningTable:/etc/opendkim/SigningTable"
       - "./data/config/opendkim/KeyTable:/etc/opendkim/KeyTable"
+      - "./data/config/opendkim/domainkeys:/etc/opendkim/domainkeys"
     environment:
       - DOMAIN=${DOMAIN}
       - HOSTNAME_FQDN=${HOSTNAME_FQDN}
-      - MYNETWORKS=${MYNETWORKS}
+#      - MYNETWORKS=${MYNETWORKS}
       - MYDESTINATION=${MYDESTINATION}
       - DKIM_SELEKTOR=${DKIM_SELEKTOR}
 

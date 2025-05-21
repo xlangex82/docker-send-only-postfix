@@ -12,6 +12,33 @@ sudo git pull https://github.com/xlangex82/docker-send-only-postfix.git
 ```bash
 sudo git pull origin master
 ```
+## Prepare your Folderstructure for docker-compose usage
+If we assume that you will create your docker-compose project unter the path /docker/YOURPROJECTNAME/
+Change YOURPROJECTNAME with your foldername
+
+change into cloned repor folder and run following commands:
+```bash
+cd docker-send-only-postfix
+cd docker-compose
+sudo chmod +x create_files_and_folders.sh
+sudo ./create_files_and_folders.sh /docker/YOURPROJECTNAME/data/
+```
+After that, you need to copy the example docker-compose.yml and .env file
+```bash
+sudo cp docker-compose.yml /docker/YOURPROJECTNAME/.
+sudo cp .env /docker/YOURPROJECTNAME/.
+```
+Your projectfolder should look like this
+```bash
+drwxr-xr-x 4 root root 4096 May 21 07:29 .
+drwxr-xr-x 7 root root 4096 May 20 13:11 ..
+drwxr-xr-x 3 root root 4096 May 19 03:11 data
+-rw-r--r-- 1 root root 1964 May 19 03:29 docker-compose.yml
+-rw-r--r-- 1 root root 1007 May 19 03:30 .env
+```
+
+Next edit .env file to your needs!
+Next edit docker-compose.yml file according your needs!
 
 ## Build your own local image from Dockerfile
 
@@ -28,39 +55,30 @@ To check the newly created image is now available on your hostsystem fire the fo
 sudo docker images
 ```
 
-## copy files
-Copy needed exampkle files to your docker project folder from cloned git-repo folder
+## Run the container with docker-compose
+
+To start the container the first time execute
 
 ```bash
-# cd into your project folder
-sudo cp docker-send-only-postfix/.env .
-sudo cp docker-send-only-postfix/docker-compose/docker-compose.yml .
-sudo cp docker-send-only-postfix/config data/. -r
+cd /docker/YOURPROJECTNAME
+sudo docker compose up -d && sudo docker logs -f postfix-relay-server
 ```
 
-## Setup
-In order to use this container, you will need to setup OpenDKIM.
+## Initial Setup explained
+If files in foleder YOURPROJECTNAME/data doesn't exist or are 0byte - the initial setup starts automatically.
+initial setup only work if all env variables are properly set!
 
-Generate a pair of private-public key:
-```bash
-mkdir keys
-cd keys
-opendkim-genkey -s mail -d example.com
-```
-The command will generate 2 files `mail.private`, your private key, and `mail.txt`, with the DNS record you need to setup.
+The setup takes care about the config files and creates them properly.
+The Setup generates a DKIM pair of private-public key:
+The command will generate also 2 DKIM files `${DKIM_SELEKTOR}.private`, your private key, and `${DKIM_SELEKTOR}.txt`, with the DNS record you need to setup.
 ```txt
-TXT mail._domainkey.example.com "v=DKIM1; k=rsa; p=...private key..."
+TXT ${DKIM_SELEKTOR}._domainkey.example.com "v=DKIM1; k=rsa; p=...private key..."
 ```
 
 ## Usage
 Make sure the container is not directly exposed on the Internet, since it will accept emails from every network interface. The typical setup is to connect it to other Docker containers using some private network.
-```bash
-docker run -d \
-    -p 127.0.0.1:25:25 \
-    -e DOMAIN=example.com \
-    -v /path/to/mail.private:/etc/opendkim/domainkeys/mail.private \
-    davidepedranz/docker-send-only-postfix:v0.1.0
-```
+
+Watch your Firewall settings!
 
 ## Optional - but highly recommended
 Setup SPF to limit who can send emails on behave of your domain. See the references.
