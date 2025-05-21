@@ -43,6 +43,7 @@ Next edit docker-compose.yml file according your needs!
 ## Build your own local image from Dockerfile
 
 Run the following to create your local image (change the tagging/naming as you wish)
+change into cloned repor folder and run following commands:
 ```bash
 sudo docker build -t xlangex82/send-only-postfix:2025-05-20.Alpha1 -f Dockerfile . 
 ```
@@ -71,9 +72,7 @@ initial setup only work if all env variables are properly set!
 The setup takes care about the config files and creates them properly.
 The Setup generates a DKIM pair of private-public key:
 The command will generate also 2 DKIM files `${DKIM_SELEKTOR}.private`, your private key, and `${DKIM_SELEKTOR}.txt`, with the DNS record you need to setup.
-```txt
-TXT ${DKIM_SELEKTOR}._domainkey.example.com "v=DKIM1; k=rsa; p=...private key..."
-```
+
 
 ## Usage
 Make sure the container is not directly exposed on the Internet, since it will accept emails from every network interface. The typical setup is to connect it to other Docker containers using some private network.
@@ -89,9 +88,9 @@ Example (limit only the IP that maps to domain example.com to send emails):
 TXT example.com "v=spf1 a -all"
 ```
 # DKIM
-See #setup
-```txt
-TXT mail._domainkey.example.com "v=DKIM1; k=rsa; p=...private key..."
+Create your DKIM Record with values from created file
+```bash
+sudo cat /docker/YOURPROJECTNAME/data/config/opendkim/domainkeys/${DKIM_SELEKTOR}.txt 
 ```
 
 # DMARC
