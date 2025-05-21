@@ -44,7 +44,9 @@ tls_preempt_cipherlist = yes
 
 # ================== Incomming encryption settings ==========================
 # do not require encryption from the client to this server
-smtpd_tls_security_level = none
+smtpd_tls_security_level = none # cange to may or encrypt and enable cert file(s)
+#smtpd_tls_cert_file = /certs/${DOMAIN}.crt
+#smtpd_tls_key_file = /certs/${DOMAIN}.key
 smtpd_relay_restrictions =  permit_mynetworks, defer_unauth_destination
 
 

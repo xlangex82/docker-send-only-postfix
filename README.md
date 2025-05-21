@@ -78,6 +78,10 @@ The command will generate also 2 DKIM files `${DKIM_SELEKTOR}.private`, your pri
 Make sure the container is not directly exposed on the Internet, since it will accept emails from every network interface. The typical setup is to connect it to other Docker containers using some private network.
 
 Watch your Firewall settings!
+sample
+```bash
+sudo ufw allow smtp
+```
 
 ## Optional - but highly recommended
 Setup SPF to limit who can send emails on behave of your domain. See the references.

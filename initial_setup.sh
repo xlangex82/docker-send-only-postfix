@@ -57,6 +57,11 @@ if [ ! -f /etc/opendkim/domainkeys/${DKIM_SELEKTOR}.private ]; then
     opendkim-genkey -s ${DKIM_SELEKTOR} -d ${DOMAIN} --directory=/etc/opendkim/domainkeys/ && echo "[INFO] DKIM key generated"
 fi
 
+openssl genrsa -out /certs/${DOMAIN}.key 2048
+openssl req -new -key /certs/${DOMAIN}.key -out /certs/csr_${DOMAIN}.req
+openssl x509 -req -x509 -in /certs/csr_${DOMAIN}.req -key /certs/${DOMAIN}.key -out /certs/${DOMAIN}.crt -days 3650
+
+
 # fix permissions on files
 echo "[INFO] check and fix permission on DKIM key file(s)"
 chown opendkim:opendkim /etc/opendkim/domainkeys
