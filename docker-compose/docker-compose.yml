@@ -22,6 +22,7 @@ services:
       - "./data/config/opendkim/KeyTable:/etc/opendkim/KeyTable"
       - "./data/config/opendkim/domainkeys:/etc/opendkim/domainkeys"
       - "./data/config/certs:/certs"
+      - "./data/spool:/var/spool/postfix"
     environment:
       - DOMAIN=${DOMAIN}
       - HOSTNAME_FQDN=${HOSTNAME_FQDN}
