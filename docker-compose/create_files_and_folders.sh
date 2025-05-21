@@ -9,10 +9,10 @@
 directory=${1%/};
 echo "Your selected Mountpoint Base-Directory is $directory"
 
-mkdir -p $directory/config/{postfix,opendkim,rsyslog,supervisord}
+mkdir -p $directory/config/{postfix,opendkim,rsyslog,supervisord,certs}
 
 
-#echo "[INFO] creating Configfiles from templates"
+echo "[INFO] creating Configfiles from templates"
 touch $directory/config/opendkim/SigningTable
 touch $directory/config/postfix/main.cf
 touch $directory/config/opendkim/KeyTable
@@ -22,3 +22,5 @@ touch $directory/config/postfix/header_checks
 touch $directory/config/opendkim/opendkim.conf
 touch $directory/config/opendkim/opendkim
 touch $directory/config/opendkim/TrustedHosts
+echo "[INFO] creating self-signed certificates"
+openssl req -newkey rsa:4096 -sha512 -x509 -days 3650 -nodes -keyout $directory/config/certs/postfix-self-signed.key -out $directory/config/certs/postfix-self-signed.crt
