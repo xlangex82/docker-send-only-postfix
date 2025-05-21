@@ -12,7 +12,6 @@ echo "
                                                                            
 Send-Only-Postfix Relay Server - ENTRYPOINT
 "
-#INITIALIZED_FILE=/etc/postfix/INITIALIZED
 
 echo "[INFO] Setting up container"
 
@@ -55,10 +54,6 @@ then
   . "/initial_setup.sh"
 fi
 
-#if [ ! -f $INITIALIZED_FILE ]; then
-#  . "/initial_setup.sh"
-#  touch $INITIALIZED_FILE
-#fi
 echo "[INFO] Finished environment check - starting services now"
 
 #
