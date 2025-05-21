@@ -19,20 +19,20 @@ env
 echo "[INFO] replacing values in config file templates"
 # replace the placeholders in the configuration files
 PATTERN="s/\${DOMAIN}/$DOMAIN/g"
-sed -i ${PATTERN} /template/etc/opendkim/SigningTable.tpl
-sed -i ${PATTERN} /template/etc/postfix/main.cf.tpl
-sed -i ${PATTERN} /template/etc/opendkim/KeyTable.tpl
+sed -i "${PATTERN}" /template/etc/opendkim/SigningTable.tpl
+sed -i "${PATTERN}" /template/etc/postfix/main.cf.tpl
+sed -i "${PATTERN}" /template/etc/opendkim/KeyTable.tpl
 
 PATTERN="s/\${HOSTNAME_FQDN}/$HOSTNAME_FQDN/g"
-sed -i ${PATTERN} /template/etc/postfix/main.cf.tpl
+sed -i "${PATTERN}" /template/etc/postfix/main.cf.tpl
 PATTERN="s/\${MYNETWORKS}/$MYNETWORKS/g"
-sed -i ${PATTERN} /template/etc/postfix/main.cf.tpl
+sed -i "${PATTERN}" /template/etc/postfix/main.cf.tpl
 PATTERN="s/\${MYDESTINATION}/$MYDESTINATION/g"
-sed -i ${PATTERN} /template/etc/postfix/main.cf.tpl
+sed -i "${PATTERN}" /template/etc/postfix/main.cf.tpl
 
 PATTERN="s/\${DKIM_SELEKTOR}/$DKIM_SELEKTOR/g"
-sed -i ${PATTERN} /template/etc/opendkim/SigningTable.tpl
-sed -i ${PATTERN} /template/etc/opendkim/KeyTable.tpl
+sed -i "${PATTERN}" /template/etc/opendkim/SigningTable.tpl
+sed -i "${PATTERN}" /template/etc/opendkim/KeyTable.tpl
 
 
 echo "[INFO] creating Configfiles from templates"
