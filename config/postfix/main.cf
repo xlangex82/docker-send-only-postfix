@@ -10,7 +10,7 @@ myorigin = ${DOMAIN}
 # we do NOT want to receive emails from any domain... specify an empty list here
 mydestination = ${MYDESTINATION}
 # we only want to allow from defined networks
-mynetworks = ${MYNETWORKS}
+mynetworks = 10.0.0.0/8 172.16.0.0/24 127.0.0.0/8 192.168.0.0/16 [::1]/128
 
 
 # tells Postfix from which networks it should accept emails to send

@@ -25,8 +25,8 @@ sed -i "${PATTERN}" /template/etc/opendkim/KeyTable.tpl
 
 PATTERN="s/\${HOSTNAME_FQDN}/$HOSTNAME_FQDN/g"
 sed -i "${PATTERN}" /template/etc/postfix/main.cf.tpl
-PATTERN="s/\${MYNETWORKS}/$MYNETWORKS/g"
-sed -i "${PATTERN}" /template/etc/postfix/main.cf.tpl
+#PATTERN="s/\${MYNETWORKS}/$MYNETWORKS/g"
+#sed -i "${PATTERN}" /template/etc/postfix/main.cf.tpl
 PATTERN="s/\${MYDESTINATION}/$MYDESTINATION/g"
 sed -i "${PATTERN}" /template/etc/postfix/main.cf.tpl
 

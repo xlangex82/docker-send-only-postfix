@@ -27,11 +27,11 @@ if [ -z "${HOSTNAME_FQDN}" ]; then
     echo "HOSTNAME_FQDN environment variable not found. Please set it before running this Docker container."
     exit 1
 fi
-# read MYNETWORKS from environment
-if [ -z "${MYNETWORKS}" ]; then
-    echo "MYNETWORKS environment variable not found. Please set it before running this Docker container."
-    exit 1
-fi
+## read MYNETWORKS from environment
+#if [ -z "${MYNETWORKS}" ]; then
+#    echo "MYNETWORKS environment variable not found. Please set it before running this Docker container."
+#    exit 1
+#fi
 # read DKIM_SELEKTOR from environment
 if [ -z "${DKIM_SELEKTOR}" ]; then
     echo "DKIM_SELEKTOR environment variable not found. Please set it before running this Docker container."
