@@ -21,7 +21,7 @@ services:
       - "./data/config/opendkim/SigningTable:/etc/opendkim/SigningTable"
       - "./data/config/opendkim/KeyTable:/etc/opendkim/KeyTable"
       - "./data/config/opendkim/domainkeys:/etc/opendkim/domainkeys"
-      - ".data/certs:/certs"
+      - "./data/config/certs:/certs"
     environment:
       - DOMAIN=${DOMAIN}
       - HOSTNAME_FQDN=${HOSTNAME_FQDN}
