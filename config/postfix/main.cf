@@ -73,3 +73,9 @@ relay_destination_concurrency_limit = 20
 smtp_destination_concurrency_limit = 20
 virtual_destination_concurrency_limit = 20
 
+# ================== Security Settings ==========================
+postscreen_greet_action = enforce
+postscreen_access_list =
+        permit_mynetworks
+smtpd_data_restrictions = reject_unauth_pipelining
+smtpd_forbid_bare_newline = normalize
