@@ -40,12 +40,12 @@ cat /template/etc/opendkim/SigningTable.tpl > /etc/opendkim/SigningTable
 cat /template/etc/postfix/main.cf.tpl > /etc/postfix/main.cf
 cat /template/etc/opendkim/KeyTable.tpl > /etc/opendkim/KeyTable
 
-cat /template/etc/supervisor/supervisord.conf.tpl > /etc/supervisor/supervisord.conf
-cat /template/etc/rsyslog.conf.tpl > /etc/rsyslog.conf
-cat /template/etc/postfix/header_checks.tpl > /etc/postfix/header_checks
-cat /template/etc/opendkim.conf.tpl > /etc/opendkim.conf
-cat /template/etc/default/opendkim.tpl > /etc/default/opendkim
-cat /template/etc/opendkim/TrustedHosts.tpl > /etc/opendkim/TrustedHosts
+cp /template/etc/supervisor/supervisord.conf.tpl /etc/supervisor/supervisord.conf
+cp /template/etc/rsyslog.conf.tpl /etc/rsyslog.conf
+cp /template/etc/postfix/header_checks.tpl /etc/postfix/header_checks
+cp /template/etc/opendkim.conf.tpl /etc/opendkim.conf
+cp /template/etc/default/opendkim.tpl /etc/default/opendkim
+cp /template/etc/opendkim/TrustedHosts.tpl /etc/opendkim/TrustedHosts
 
 
 echo "[INFO] Check for DKIM keys"

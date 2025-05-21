@@ -38,9 +38,24 @@ if [ -z "${DKIM_SELEKTOR}" ]; then
     exit 1
 fi
 
+# check for existing config files - run initial_setup if not present or empty
+# -s :: True if file exists and has a size greater than zero.
+if [ ! -s /etc/postfix/main.cf ] || \
+   [ ! -s /etc/postfix/header_checks ] || \
+   [ ! -s /etc/opendkim.conf ] || \
+   [ ! -s /etc/default/opendkim ] || \
+   [ ! -s /etc/opendkim/KeyTable ] || \
+   [ ! -s /etc/opendkim/SigningTable ] || \
+   [ ! -s /etc/opendkim/TrustedHosts ] || \
+   [ ! -s /etc/rsyslog.conf ] || \
+   [ ! -s /etc/supervisor/supervisord.conf ]
+then
+  . "/initial_setup.sh"
+fi
+
 echo "[INFO] Finished environment check - starting services now"
 
-#exec /initial_setup.sh
+#
 
 # launch the processes supervisor
 /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
