@@ -73,6 +73,10 @@ relay_destination_concurrency_limit = 20
 smtp_destination_concurrency_limit = 20
 virtual_destination_concurrency_limit = 20
 
+# For BULK mail sending
+default_destination_rate_delay = 5s
+default_destination_recipient_limit = 50
+
 # ================== Security Settings ==========================
 postscreen_greet_action = enforce
 postscreen_access_list =
