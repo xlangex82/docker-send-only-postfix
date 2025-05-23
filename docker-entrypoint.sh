@@ -58,5 +58,4 @@ echo "[INFO] Finished environment check - starting services now"
 
 #
 
-# launch the processes supervisor
-/usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+exec "$@"

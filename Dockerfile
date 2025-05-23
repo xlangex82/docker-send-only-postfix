@@ -11,7 +11,7 @@ LABEL maintainer="XlangeX82" \
 # install packages
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends supervisor postfix opendkim opendkim-tools rsyslog rsyslog-gnutls && \
+    apt-get install -y --no-install-recommends supervisor postfix opendkim opendkim-tools rsyslog rsyslog-gnutls nano joe && \
     rm -rf /var/lib/apt/lists/* 
 
 # mail server will be listening on this port
@@ -36,3 +36,9 @@ RUN chmod +x /initial_setup.sh
 ADD ./docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
+
+
+ADD start.sh /start.sh
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]
