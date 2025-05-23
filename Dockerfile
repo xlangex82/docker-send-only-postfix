@@ -11,7 +11,7 @@ LABEL maintainer="XlangeX82" \
 # install packages
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends supervisor postfix opendkim opendkim-tools rsyslog && \
+    apt-get install -y --no-install-recommends supervisor postfix opendkim opendkim-tools rsyslog rsyslog-gnutls && \
     rm -rf /var/lib/apt/lists/* 
 
 # mail server will be listening on this port
