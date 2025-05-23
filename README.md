@@ -89,7 +89,19 @@ sudo docker logs -f postfix-relay-server
 ```
 The RSYSLOG module is installed and running.
 If you wish to enable "logshipping" - eg. to GrayLog - check the rsyslog.conf in .data/config/rsyslog folder.
-Alternate: add in docker-compose.yml file for local mount volume to /var/log/mail.log
+Alternate: add in docker-compose.yml file logging-driver settings.
+Sample:
+```bash
+...
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp+tls://logserver.example.com:514"
+        syslog-tls-ca-cert: "/FULL/PATH//TO/certs/logserver-cert.pem"
+        tag: "YOURPROJECTNAME_eg"
+        syslog-format: "rfc3164"
+...
+```
 
 ## Optional - but highly recommended
 Setup SPF to limit who can send emails on behave of your domain. See the references.

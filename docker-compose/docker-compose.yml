@@ -30,6 +30,15 @@ services:
       - MYDESTINATION=${MYDESTINATION}
       - DKIM_SELEKTOR=${DKIM_SELEKTOR}
 
+#    logging:
+#      driver: syslog
+#      options:
+#        syslog-address: "tcp+tls://logserver.example.com:514"
+#        syslog-tls-ca-cert: "/FULL/PATH//TO/certs/logserver-cert.pem"
+#        tag: "YOURPROJECTNAME_eg"
+#        syslog-format: "rfc3164"
+
+
 # If you want to use limited ressources - example
 #    deploy:
 #      resources:
