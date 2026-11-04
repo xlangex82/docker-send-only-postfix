@@ -1,0 +1,27 @@
+services:
+  relay:
+    build: .
+    hostname: ${HOSTNAME_FQDN:?Set HOSTNAME_FQDN in .env}
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?Set DOMAIN in .env}
+      HOSTNAME_FQDN: ${HOSTNAME_FQDN:?Set HOSTNAME_FQDN in .env}
+      DKIM_SELECTOR: ${DKIM_SELECTOR:-mail}
+      MYNETWORKS: ${MYNETWORKS:-127.0.0.0/8}
+      RELAYHOST: ${RELAYHOST:-}
+      SMTP_TLS_SECURITY_LEVEL: ${SMTP_TLS_SECURITY_LEVEL:-may}
+    ports:
+      # Bound to localhost by default. Explicitly change for remote clients.
+      - "127.0.0.1:2525:25"
+    volumes:
+      - dkim_keys:/var/lib/opendkim/keys
+      - mail_queue:/var/spool/postfix
+      - ./overrides:/overrides:ro
+    healthcheck:
+      test: ["CMD-SHELL", "postfix status >/dev/null 2>&1 && pgrep -x opendkim >/dev/null"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+volumes:
+  dkim_keys:
+  mail_queue:
