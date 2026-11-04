@@ -1,135 +1,91 @@
-# docker-send-only-postfix
-Docker container with Postfix configured in send-only mode and OpenDKIM.
-Postfix will accept emails from all private IP addresses on all network interfaces.
-All emails send from Postfix to other email servers are encrypted using standard TLS.
+# docker-send-only-postfix v2
 
-## Clone Repo
-```bash
-sudo git pull https://github.com/xlangex82/docker-send-only-postfix.git 
-```
+Minimal **outbound-only SMTP relay** using Postfix and OpenDKIM. Accepts SMTP messages **only from explicitly trusted IP ranges**, signs outgoing mail for one configured domain and delivers via MX or optional smarthost. **No mailboxes, no IMAP/POP3, no inbound domain hosting.**
 
-## Update your local Repo files
-```bash
-sudo git pull origin master
-```
-## Prepare your Folderstructure for docker-compose usage
-If we assume that you will create your docker-compose project unter the path /docker/YOURPROJECTNAME/
-Change YOURPROJECTNAME with your foldername
+> Development rewrite on branch `v2-rewrite`. Test before deployment. Not a general-purpose mailserver.
 
-change into cloned repor folder and run following commands:
-```bash
+## Quick start
+
+```sh
+git clone https://github.com/xlangex82/docker-send-only-postfix.git
 cd docker-send-only-postfix
-cd docker-compose
-sudo chmod +x create_files_and_folders.sh
-sudo ./create_files_and_folders.sh /docker/YOURPROJECTNAME/data/
-```
-After that, you need to copy the example docker-compose.yml and .env file
-```bash
-sudo cp docker-compose.yml /docker/YOURPROJECTNAME/.
-sudo cp .env /docker/YOURPROJECTNAME/.
-```
-Your projectfolder should look like this
-```bash
-drwxr-xr-x 4 root root 4096 May 21 07:29 .
-drwxr-xr-x 7 root root 4096 May 20 13:11 ..
-drwxr-xr-x 3 root root 4096 May 19 03:11 data
--rw-r--r-- 1 root root 1964 May 19 03:29 docker-compose.yml
--rw-r--r-- 1 root root 1007 May 19 03:30 .env
+git checkout v2-rewrite
+cp .env.example .env
+# Edit DOMAIN, HOSTNAME_FQDN, MYNETWORKS
+docker compose up -d --build
+docker compose logs -f relay
 ```
 
-Next edit .env file to your needs!
-Next edit docker-compose.yml file according your needs!
+The example binds **127.0.0.1:2525** on the Docker host, not a public interface. To accept clients on a private interface, adjust `ports` in `compose.yaml` **and** explicitly allow their actual source CIDRs in `MYNETWORKS`. Docker NAT/bridge addresses may differ from client addresses; inspect logs and test authorization. Never publish an unrestricted relay to the Internet.
 
-## Build your own local image from Dockerfile
+## Configuration
 
-Run the following to create your local image (change the tagging/naming as you wish)
-change into cloned repor folder and run following commands:
-```bash
-sudo docker build -t xlangex82/send-only-postfix:2025-05-20.Alpha1 -f Dockerfile . 
-```
-If the process ends without any errors, the image is normally created successfully.
+| Variable | Meaning |
+| --- | --- |
+| `DOMAIN` | Signing domain (required) |
+| `HOSTNAME_FQDN` | SMTP hostname (required) |
+| `DKIM_SELECTOR` | DKIM selector; default `mail` |
+| `MYNETWORKS` | Space/comma separated allowed CIDRs; default loopback only |
+| `RELAYHOST` | Optional Postfix smarthost; empty = direct MX |
+| `SMTP_TLS_SECURITY_LEVEL` | Outbound TLS policy; default `may` |
 
-If not successfull, please check the errormessage!
+On **every start**, the entrypoint regenerates Postfix and OpenDKIM configuration from environment plus constrained overrides. Changes take effect after `docker compose up -d` / recreation. It does not dump environment variables to logs.
 
-To check the newly created image is now available on your hostsystem fire the following command and look for your given imagename
-```bash
-sudo docker images
-```
+### DKIM DNS
 
-## Run the container with docker-compose
+Keys are generated on first start and stored in the persistent `dkim_keys` volume. Publish the TXT record from:
 
-To start the container the first time execute
-
-```bash
-cd /docker/YOURPROJECTNAME
-sudo docker compose up -d && sudo docker logs -f postfix-relay-server
+```sh
+docker compose exec relay cat /var/lib/opendkim/keys/mail.txt
 ```
 
-## Initial Setup explained
-If files in foleder YOURPROJECTNAME/data doesn't exist or are 0byte - the initial setup starts automatically.
-initial setup only work if all env variables are properly set!
+Replace `mail` with your selector. Keep the private key secret; back up the volume. Changing the signing domain requires a new selector/key volume to avoid accidental reuse.
 
-The setup takes care about the config files and creates them properly.
-The Setup generates a DKIM pair of private-public key:
-The command will generate also 2 DKIM files `${DKIM_SELEKTOR}.private`, your private key, and `${DKIM_SELEKTOR}.txt`, with the DNS record you need to setup.
+### Optional overrides
 
+Create `overrides/postfix/custom.conf` with allowed `main.cf` parameters:
 
-## Usage
-Make sure the container is not directly exposed on the Internet, since it will accept emails from every network interface. The typical setup is to connect it to other Docker containers using some private network.
-
-Watch your Firewall settings!
-sample
-```bash
-sudo ufw allow smtp
-```
-## Logging
-All logfiles are present with
-```bash
-sudo docker logs -f postfix-relay-server
-```
-The RSYSLOG module is installed and running.
-If you wish to enable "logshipping" - eg. to GrayLog - check the rsyslog.conf in .data/config/rsyslog folder.
-Alternate: add in docker-compose.yml file logging-driver settings.
-Sample:
-```bash
-...
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp+tls://logserver.example.com:514"
-        syslog-tls-ca-cert: "/FULL/PATH//TO/certs/logserver-cert.pem"
-        tag: "YOURPROJECTNAME_eg"
-        syslog-format: "rfc3164"
-...
+```ini
+message_size_limit = 52428800
+smtp_destination_concurrency_limit = 10
 ```
 
-## Optional - but highly recommended
-Setup SPF to limit who can send emails on behave of your domain. See the references.
-Go to your DNS-Provider and create/change the following DNS-Entries
-# SPF
-Example (limit only the IP that maps to domain example.com to send emails):
-```txt
-TXT example.com "v=spf1 a -all"
-```
-# DKIM
-Create your DKIM Record with values from created file
-```bash
-sudo cat /docker/YOURPROJECTNAME/data/config/opendkim/domainkeys/${DKIM_SELEKTOR}.txt 
+Only a small allowlist of operational parameters is supported. Unsupported directives cause startup to **fail**. In particular, `S|`, `F|` and `P|` master.cf overrides are **intentionally blocked**, since service overrides could turn the relay into a receiving/delivery server. This is intentionally narrower than mailserver2/mailserver customization.
+
+Optional `overrides/opendkim/custom.conf` supports selected directives such as:
+
+```text
+Canonicalization relaxed/relaxed
+LogWhy yes
 ```
 
-# DMARC
-Setup DMARC to limit who can send emails on behave of your domain. Please setup and check SPF and DKIM before DMARC.
-```
-TXT _dmarc.example.com "v=DMARC1; p=reject; pct=100; adkim=s; aspf=s"
-```
-Check tool: https://dmarcian.com/dmarc-inspector/
+No full config-file replacement is supported; trust, signing tables and sockets are protected.
 
-## References
-- https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-dkim-with-postfix-on-debian-wheezy
-- https://www.digitalocean.com/community/tutorials/how-to-use-an-spf-record-to-prevent-spoofing-improve-e-mail-reliability
+## Safety model
 
-## Initial Forked
-This is basically forked from https://github.com/davidepedranz/docker-send-only-postfix
+- Explicit SMTP client IP allowlist; all other SMTP clients rejected.
+- `mydestination`, `relay_domains` and virtual domains are empty.
+- Local and virtual delivery transports are disabled.
+- `master.cf` is generated as a fixed service list without local/virtual delivery agents.
+- Unsupported Postfix/OpenDKIM overrides fail closed.
+- No mailbox server components installed.
+- Queue and DKIM keys persist; Postfix/OpenDKIM configs do not.
+
+**Threat boundary:** A user with Docker administrator access or the ability to replace container files/image can bypass these constraints. This image protects its documented configuration interface, not against a hostile Docker administrator. The relay still receives messages from authorized SMTP clients; that is required for sending.
+
+**Before production:** Verify authorization, DKIM DNS, SPF/DMARC, reverse DNS, outbound port 25 availability, TLS policy and external deliverability. Direct-to-MX with mandatory TLS (`encrypt`) may fail for destinations without STARTTLS.
+
+## Validation
+
+```sh
+docker compose config
+docker compose run --rm relay check
+docker compose up -d --build
+docker compose ps
+```
+
+See `tests/test_config.py` for static security-contract checks.
 
 ## License
-See [LICENSE](LICENSE) file.
+
+See [LICENSE](LICENSE). Originally forked from [davidepedranz/docker-send-only-postfix](https://github.com/davidepedranz/docker-send-only-postfix).
