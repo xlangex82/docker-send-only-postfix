@@ -1,3 +1,10 @@
+.env
+**/.env
+!**/.env.example
 keys/
+*.private
+*.key
+data/
 todo/
 .DS_Store
+__pycache__/
